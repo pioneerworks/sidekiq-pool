@@ -246,8 +246,11 @@ module Sidekiq
           update_process_name
           signal_to_pool(sig)
         when 'USR2'
-          logger.info "Sending #{sig} signal to the pool"
-          signal_to_pool(sig)
+          logger.info "Sending TSTP signal to the pool"
+          signal_to_pool('TSTP')
+          stop_children
+          logger.info 'Bye!'
+          exit(0)
         when 'HUP'
           reload
         end
